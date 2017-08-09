@@ -1,11 +1,15 @@
 const User = require('./user')
 const connection = require('./connection')
-const Bluebird = require('bluebird')
-
+function exit() {
+  console.log('closing DB')
+  connection.destroy()
+    .then(() => 'closed DB')
+    .catch(console.error)
+}
 function addUser () {
-  User.forge({
-    email: 'foo4@gmail.com',
-    password: 'test',
+  return User.forge({
+    email: 'foo@gmail.com',
+    name: 'Mr Foo',
     meta: {
       foo: 'bar'
     }
@@ -14,6 +18,7 @@ function addUser () {
 }
 
 function selectUsers () {
+  const Bluebird = require('bluebird')
   User.fetchAll() // returns Collection
   .then(collection => {
     const users = []
@@ -25,12 +30,5 @@ function selectUsers () {
   .then(console.log, console.error)
 }
 
-// addUser()
-selectUsers()
-
-setTimeout(() => {
-  console.log('closing DB')
-  connection.destroy()
-    .then(() => 'closed DB')
-    .catch(console.error)
-}, 2000)
+addUser().then(exit)
+// selectUsers()

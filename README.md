@@ -24,7 +24,17 @@ We are going to need the following dependencies
 ## Connection
 
 See how we make a connection to the database in [connection.js](connection.js),
-[database.js](database.js) and [knexfile.js](knexfile.js)
+[database.js](database.js) and [knexfile.js](knexfile.js). Because we are going
+to store JSON columns, we should load the `bookshelf-json-columns` plugin.
+
+```js
+'use strict'
+var knex = require('./connection')
+var bookshelf = require('bookshelf')(knex)
+var jsonColumns = require('bookshelf-json-columns')
+bookshelf.plugin(jsonColumns)
+module.exports = bookshelf
+```
 
 ## Making a table
 
@@ -81,3 +91,64 @@ exports.down = function(knex, Promise) {
 ```
 
 Let us run the migration from command line
+
+```bash
+$ npm run migrate:latest
+
+> bookshelf-json-example@1.0.0 migrate:latest /git/bookshelf-json-example
+> knex migrate:latest
+
+Using environment: development
+Batch 1 run: 1 migrations
+/git/bookshelf-json-example/migrations/20170809124258_users.js
+```
+
+This should create a file `dev.sqlite3` that will be our database
+
+## User model
+
+Let us create a "user" model class that extends Bookshelf model. We must
+list all JSON columns in the table to turn on automatic serialization.
+
+```js
+// user.js
+const Bookshelf = require('./database')
+const User = Bookshelf.Model.extend({
+  tableName: 'users',
+  hasTimestamps: true,
+}, {
+  jsonColumns: ['meta']
+})
+module.exports = Bookshelf.model('User', User)
+```
+
+Let us insert a user into the database. I will use [index.js](index.js)
+for this
+
+```js
+const User = require('./user')
+const connection = require('./connection')
+function exit() {
+  console.log('closing DB')
+  connection.destroy()
+    .then(() => 'closed DB')
+    .catch(console.error)
+}
+function addUser () {
+  return User.forge({
+    email: 'foo@gmail.com',
+    name: 'Mr Foo',
+    meta: {
+      foo: 'bar'
+    }
+  }).save()
+    .then(console.log, console.error)
+}
+addUser().then(exit)
+```
+
+Run this code once to insert a user
+
+```bash
+$ npm start
+```
