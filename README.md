@@ -191,3 +191,36 @@ $ npm start
     updated_at: 1502297699402 } ]
 closing DB
 ```
+
+## Updating JSON property
+
+To update a property deep inside the `meta` object, we need to fetch the
+specific user, get "meta" attribute, update its value, then save the
+user model.
+
+```js
+function changeMetaFoo (newValue) {
+  return User.where('email', 'foo@gmail.com')
+    .fetch()
+    .then(user => {
+      const meta = user.get('meta')
+      meta.foo = newValue
+      user.set('meta', meta)
+      return user.save()
+    })
+}
+changeMetaFoo('new bar').then(exit)
+```
+
+After running the update, if we fetch the users again, we see updated JSON
+object
+
+```bash
+[ { id: 1,
+    email: 'foo@gmail.com',
+    name: 'Mr Foo',
+    meta: { foo: 'new bar' },
+    created_at: 1502297699402,
+    updated_at: 1502297699402 } ]
+closing DB
+```

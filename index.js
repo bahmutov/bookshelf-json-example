@@ -33,5 +33,17 @@ function selectUsers () {
   .then(console.log, console.error)
 }
 
+function changeMetaFoo (newValue) {
+  return User.where('email', 'foo@gmail.com')
+    .fetch()
+    .then(user => {
+      const meta = user.get('meta')
+      meta.foo = newValue
+      user.set('meta', meta)
+      return user.save()
+    })
+}
+
 // addUser().then(exit)
 selectUsers().then(exit)
+// changeMetaFoo('new bar').then(exit)
