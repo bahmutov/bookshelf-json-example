@@ -17,18 +17,21 @@ function addUser () {
     .then(console.log, console.error)
 }
 
-function selectUsers () {
+function fetchEach (collection) {
   const Bluebird = require('bluebird')
-  User.fetchAll() // returns Collection
-  .then(collection => {
-    const users = []
-    collection.each(user => {
-      users.push(user.fetch().then(b => b.toJSON()))
-    })
-    return Bluebird.all(users)
+  const list = []
+  collection.each(item => {
+    // and convert to JSON right away
+    list.push(item.fetch().then(b => b.toJSON()))
   })
+  return Bluebird.all(list)
+}
+
+function selectUsers () {
+  return User.fetchAll()
+  .then(fetchEach)
   .then(console.log, console.error)
 }
 
-addUser().then(exit)
-// selectUsers()
+// addUser().then(exit)
+selectUsers().then(exit)

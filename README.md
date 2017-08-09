@@ -152,3 +152,42 @@ Run this code once to insert a user
 ```bash
 $ npm start
 ```
+
+## Fetching users
+
+I need to fetch all users from the database. I could keep a wrapped item, but
+I would like to just fetch all properties, so I will convert models into
+pain objects.
+
+```js
+function fetchEach (collection) {
+  const Bluebird = require('bluebird')
+  const list = []
+  collection.each(item => {
+    // and convert to JSON right away
+    list.push(item.fetch().then(b => b.toJSON()))
+  })
+  return Bluebird.all(list)
+}
+
+function selectUsers () {
+  return User.fetchAll()
+  .then(fetchEach)
+  .then(console.log, console.error)
+}
+
+selectUsers().then(exit)
+```
+
+Running the code shows that the JSON values were parsed back into an object
+
+```bash
+$ npm start
+[ { id: 1,
+    email: 'foo@gmail.com',
+    name: 'Mr Foo',
+    meta: { foo: 'bar' },
+    created_at: 1502297699402,
+    updated_at: 1502297699402 } ]
+closing DB
+```
