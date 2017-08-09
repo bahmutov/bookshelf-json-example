@@ -80,7 +80,7 @@ exports.up = function(knex, Promise) {
       table.increments();
       table.string('email').unique();
       table.string('name');
-      table.jsonb('meta')
+      table.jsonb('meta');
       table.timestamps();
     })
   ]);
@@ -103,7 +103,7 @@ Batch 1 run: 1 migrations
 /git/bookshelf-json-example/migrations/20170809124258_users.js
 ```
 
-This should create a file `dev.sqlite3` that will be our database
+This should create a file `dev.sqlite3` that will be our database.
 
 ## User model
 

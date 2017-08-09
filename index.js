@@ -45,5 +45,9 @@ function changeMetaFoo (newValue) {
 }
 
 // addUser().then(exit)
-selectUsers().then(exit)
+// selectUsers().then(exit)
 // changeMetaFoo('new bar').then(exit)
+addUser()
+  .then(selectUsers)
+  .then(exit)
+
