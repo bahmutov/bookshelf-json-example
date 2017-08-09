@@ -1,0 +1,37 @@
+{
+  "name": "bookshelf-json-example",
+  "version": "1.0.0",
+  "description": "Example of DB with JSON object inside a column",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm run migrate:latest",
+    "start": "node index.js",
+    "migrate:make": "knex migrate:make",
+    "migrate:latest": "knex migrate:latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahmutov/bookshelf-json-example.git"
+  },
+  "keywords": [
+    "json",
+    "jsonb",
+    "database",
+    "example",
+    "bookshelf",
+    "bookshelfjs"
+  ],
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bahmutov/bookshelf-json-example/issues"
+  },
+  "homepage": "https://github.com/bahmutov/bookshelf-json-example#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "bookshelf": "^0.10.4",
+    "bookshelf-json-columns": "^2.1.1",
+    "knex": "^0.13.0",
+    "sqlite3": "^3.1.9"
+  }
+}
